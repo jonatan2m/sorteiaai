@@ -1,0 +1,32 @@
+body {
+  padding-top: 50px;
+}
+.content {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+section > div > ul li{
+	display: inline;	
+	font-size: 50px;
+}
+section > div > ul li:not(:last-child):after{
+	display: inline;	
+	content: ", ";
+}
+
+section#raffle {
+	/*display: none;*/
+}
+section#raffle > label {
+	font-size: 150px;
+	text-shadow: 1px 3px 3pt gray;
+}
+
+.content .panel{
+	text-align: left;
+}
+
+.vertical-align{
+	padding-top: 28px;
+}
