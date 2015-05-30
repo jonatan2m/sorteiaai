@@ -1,17 +1,16 @@
 (function() {
-	var app = angular.module('sorteiaai', ['ngRoute']);
-	app.service('sorteiaaiService', function () {
+	var app = angular.module('sorteiaai', ['ngRoute'])
+	.service('sorteiaaiService', function ($timeout, $q) {
 		
 		var s = {};
 
-		
 		s.nums = [];		
 		s.remove = false;
 		s.total = 0;
 		s.speed = 1;
-		
 
-		var _config;
+
+		var setup;
 
 		function shuffle(arr) {
 			var N = arr.length;
@@ -50,22 +49,21 @@
 			s.total = 0;
 		};
 
-		var _setup = function (config) {
+		var _setup = function (data) {
 
-			config.enableButton = !config.enableButton;
+			data.enableButton = !data.enableButton;
 
-			for(var i = config.begin; i <= config.end; i++){
+			for(var i = data.config.begin; i <= data.config.end; i++){
 				s.nums.push(i);
 			}
 			s.total = s.nums.length;
-			config.show = false;
+			data.config.show = false;
 
-			_config = config;
+			setup = data;
 		};
 
-		var _next = function (config) {			
-			config.enableButton = false;
-			_config = config;
+		var _next = function () {
+			setup.enableButton = false;			
 			s.speed = 1;		
 			var index;
 			var min;
@@ -86,27 +84,27 @@
 
 		function search(min, max){
 			if(s.speed <= 100){
-				setTimeout(function (){
-					_config.last = s.nums[random(min, max)];				
+				$timeout(function (){
+					setup.last = s.nums[random(min, max)];						
 					search(min, max);
 				},  incrementSpeed());
 			}else{
 				var index = random(min, max);		
-				_config.last = _config.repeat ? s.nums[index] : s.nums.splice(index, 1).pop();
-				_config.results.push(_config.last);
+				setup.last = setup.config.repeat ? s.nums[index] : s.nums.splice(index, 1).pop();				
+				setup.results.push(setup.last);
+				setup.enableButton = true;
 
-				var limit = _config.autoLimit;
+				var limit = setup.config.autoLimit;
 				limit--;
 				s.enableButton = true;
-				if(_config.auto &&  limit > 0){
-					_config.autoLimit = limit;
-					setTimeout(function(){
+				if(setup.config.auto &&  limit > 0){
+					setup.config.autoLimit = limit;
+					$timeout(function(){
 						_next();
-					}, _config.ticksPerSecond * 1000);
+					}, setup.config.ticksPerSecond * 1000);
 
 				}
 			}
-
 		}
 
 		return {
@@ -135,24 +133,26 @@ app.config(function ($routeProvider) {
 app.controller('NumberController', ['sorteiaaiService', function(service){
 	var number = this;
 
-	number.begin = 1;
-	number.end = 10;
-	number.repeat = false;
-	number.show = true;
-	number.auto = false;
-	number.autoLimit = 2;
-	number.enableButton = false;
-	number.ticksPerSecond = 1;
+	number.config = {
+		begin : 1,
+		end : 10,
+		repeat : false,
+		show : true,
+		auto : false,
+		autoLimit : 2,
+		ticksPerSecond : 1
+	};
+
+	number.enableButton = false;	
 	number.last = '--';
 	number.results = [];
 
-	number.next = function () {
-		number.last = 2222;
-		service.next(number);		
+	number.next = function () {		
+		service.next();		
 	}
 
 	number.start = function () {
-		number.show = false;
+		number.config.show = false;
 		service.setup(number);
 	}
 

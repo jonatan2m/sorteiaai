@@ -6,19 +6,18 @@ body {
   text-align: center;
 }
 
-section > div > ul li{
+.result-number{
+	margin-top: 5px;
+}
+.result-number ul li{
 	display: inline;	
 	font-size: 50px;
 }
-section > div > ul li:not(:last-child):after{
-	display: inline;	
+.result-number ul:first-child li:not(:last-child):after{		
 	content: ", ";
 }
 
-section#raffle {
-	/*display: none;*/
-}
-section#raffle > label {
+.last-number  {
 	font-size: 150px;
 	text-shadow: 1px 3px 3pt gray;
 }
