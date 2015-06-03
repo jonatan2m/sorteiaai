@@ -19,7 +19,7 @@
 			for (var i = 0; i < N; i++) {
 				var r = random(i + 1);
 				swap(arr, i, r);
-			};
+			}
 		}
 
 		function swap(arr, i, j) {
@@ -72,7 +72,7 @@
 				min = 1;
 				shuffle(s.nums);
 			}else
-			var min = 0;
+			min = 0;
 			search(min, max);
 		};
 
@@ -111,7 +111,7 @@
 			setup: _setup,
 			reset: _reset,
 			next: _next
-		}
+		};
 	});
 
 app.config(function ($routeProvider) {
@@ -149,12 +149,12 @@ app.controller('NumberController', ['sorteiaaiService', function(service){
 
 	number.next = function () {		
 		service.next();		
-	}
+	};
 
 	number.start = function () {
 		number.config.show = false;
 		service.setup(number);
-	}
+	};
 
 	/*$http.get('/store-products.json')
 	.success(function(data){
