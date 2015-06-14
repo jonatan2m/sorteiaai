@@ -7,7 +7,11 @@ module.exports = function(grunt) {
         separator: ';'
       },
       dist: {
-        src: ['js/app.js'],
+        src: ['node_modules/angular/angular.min.js',
+              'node_modules/angular-route/angular-route.min.js',
+              'node_modules/angular-mocks/angular-mocks.js',
+              'js/app.js'
+              ],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
