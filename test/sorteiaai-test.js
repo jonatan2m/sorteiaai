@@ -1,3 +1,29 @@
+var ctrl, ctrlScope, injector, horizonMock;
+ 
+module("angular membership", {
+    setup: function () {
+        var appModule = angular.module('sorteiaai');
+        injector = angular.injector(['ng', 'sorteiaaiService']);
+ 
+        ctrlScope = injector.get('$rootScope').$new();
+        ctrl = injector.get('$controller')('NumberController', { $scope: ctrlScope, horizon: horizon });
+    },
+    teardown: function () {
+ 
+    }
+});
+
+test("Ingroup is in group", function() {
+    var membership, group;
+    membership = { role_1: ['1','2'] };
+    group = { id: '1', name: 'group', roles: [] };
+    ok(ctrlScope.inGroup(group, membership), "Group is in Membership");
+    ok(group.roles.length === 1, 'Group roles OK');
+});
+
+/*
+injector = angular.injector(['ng', 'sorteiaaiService'])
+
 QUnit.test( "Remove elements on Array", function( assert ) {
 
 	var arr = [1, 2, 3, 4];
@@ -74,4 +100,4 @@ QUnit.test( "Remove N + 1 elements on Array", function( assert ) {
 	assert.ok( arr.length === 1, "Passed!" );
 	var p = sorteiaai.next();
 	assert.ok( arr.length === 0, "Passed!" );
-});
+});*/

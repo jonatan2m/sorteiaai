@@ -1,5 +1,5 @@
 module.exports = function(grunt) {
-
+  'use strict';
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
@@ -17,15 +17,15 @@ module.exports = function(grunt) {
       },
       all: {
         src: [
-          "node_modules/bootstrap/dist/css/bootstrap.min.css",                                        
-          "css/style.css",
-          ],
+        "node_modules/bootstrap/dist/css/bootstrap.min.css",                                        
+        "css/style.css",
+        ],
         dest: "dist/styles.css"
       },
     },
     cssmin: {
       target: {
-          files: {          
+        files: {          
           'dist/styles.min.css' : ['dist/styles.css']          
         }
       }
@@ -40,27 +40,39 @@ module.exports = function(grunt) {
         }
       }
     },
-    qunit: {
-      all: {
+    /*karma: {  
+      unit: {
         options: {
-          urls:[
-          'test/index.html'
+          frameworks: ['jasmine'],
+          singleRun: true,
+          browsers: ['PhantomJS'],
+          files: [
+          'node_modules/angular/angular.min.js',
+          'node_modules/angular-mocks/angular-mocks.js',
+          'js/app.js',
+          'specs/*.js'
           ]
         }
       }
+    },*/    
+    jasmine : {
+      // Your project's source files
+      src : ['node_modules/angular/angular.min.js',
+      'node_modules/angular-route/angular-route.min.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'js//app.js'],
+      // Your Jasmine spec files
+      options: {
+        specs : 'specs/*.js'        
+      }
     },
-    /* connect: {
-        server: {
-            options: {                
-                base: '.'
-            }
-        }
-    },*/
+
     jshint: {
       files: [
-        'Gruntfile.js',
-        'js/app.js'        
-        ],
+      'Gruntfile.js',
+      'js/app.js',
+      'specs/*.js'        
+      ],
       options: {
         // options here to override JSHint defaults
         globals: {
@@ -71,11 +83,11 @@ module.exports = function(grunt) {
         }
       }
     },
-     notify_hooks: {
+    notify_hooks: {
       options: {
-      enabled: true,
-      max_js_hint_notifications: 5,
-      title: 'Cookiejar'
+        enabled: true,
+        max_js_hint_notifications: 5,
+        title: 'Cookiejar'
       }
     },
     watch: {
@@ -84,9 +96,11 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-qunit');
+grunt.loadNpmTasks('grunt-contrib-uglify');
+grunt.loadNpmTasks('grunt-contrib-jshint');
+
+grunt.loadNpmTasks('grunt-contrib-jasmine');
+  //grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-concat-css');
@@ -95,8 +109,8 @@ module.exports = function(grunt) {
   //grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-notify');
 
-  grunt.registerTask('test', ['jshint', 'qunit']);
+  grunt.registerTask('test', ['jshint', 'jasmine']);
 
-  grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'concat_css', 'cssmin', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'concat_css', 'cssmin', 'uglify']);
 
 };
