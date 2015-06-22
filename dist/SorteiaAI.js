@@ -2774,7 +2774,11 @@ if (window.jasmine || window.mocha) {
 
 app.service('coreService', function (){
 
-    var core = {};   
+    var core = {};
+    
+    var nums = [],
+    total = 0;   
+
 
     function swap(arr, i, j) {
         if(i !== j){
@@ -2784,26 +2788,50 @@ app.service('coreService', function (){
         }
     }
 
-    core.shuffle = function(arr) {
-        var N = arr.length;
-        if(N === 1) return arr;
+    core.setup = function (begin, end){
+        for(var i = begin; i <= end; i++){
+            nums.push(i);
+        }
+        total = nums.length;
+    };
+
+    core.reset = function (){
+        nums = [];
+        total = 0;
+    };
+
+    core.shuffle = function() {
+        var N = nums.length;
+        if(N === 1) return nums;
 
         for (var i = 0; i < N; i++) {
             var r = core.random(i + 1);
-            swap(arr, i, r);
+            swap(nums, i, r);
         }
-        return arr;
-    };
-
-    function randomUnic(unit) {
-        return Math.floor(Math.random() * unit);
-    }
+        return nums;
+    };    
 
     core.random = function(min, max) {
         if(max)
             return Math.floor(Math.random() * (max - min) + min);
         else
-            return randomUnic(min);         
+            return Math.floor(Math.random() * min);        
+    };
+
+    core.getRandomInList = function (min, max){
+        return nums[core.random(min, max)];                      
+    };
+
+    core.getByIndex = function (index){
+        return nums[index];
+    };
+
+    core.getAndRemoveByIndex = function (index){
+        return nums.splice(index, 1).pop();
+    };
+
+    core.getLength = function (){
+        return nums.length;       
     };
 
     return core;
@@ -2812,28 +2840,24 @@ app.service('coreService', function (){
 
 app.service('sorteiaaiService', function(coreService, $timeout, $q) {
     var s = {};    
-    s.nums = [];        
-    s.remove = false;
-    s.total = 0;
+    
+    s.remove = false;    
     s.speed = 1;
 
     var setup;
 
     var _reset = function () {
         _config = undefined;            
-        s.speed = 1;                                    
-        s.nums = [];
-        s.total = 0;
+        s.speed = 1;            
+        coreService.reset();                                
     };
 
     var _setup = function (data) {
 
         data.enableButton = !data.enableButton;
 
-        for(var i = data.config.begin; i <= data.config.end; i++){
-            s.nums.push(i);
-        }
-        s.total = s.nums.length;
+        coreService.setup(data.config.begin, data.config.end);
+
         data.config.show = false;
 
         setup = data;
@@ -2844,10 +2868,10 @@ app.service('sorteiaaiService', function(coreService, $timeout, $q) {
         s.speed = 1;        
         var index;
         var min;
-        var max = s.nums.length;
+        var max =  coreService.getLength();
         if(max !== 1){
             min = 1;
-            coreService.shuffle(s.nums);
+            coreService.shuffle();
         }else
         min = 0;
         search(min, max);
@@ -2862,12 +2886,14 @@ app.service('sorteiaaiService', function(coreService, $timeout, $q) {
     function search(min, max){
         if(s.speed <= 100){
             $timeout(function (){
-                setup.last = s.nums[coreService.random(min, max)];                      
+                setup.last = coreService.getRandomInList(min, max);
                 search(min, max);
             },  incrementSpeed());
         }else{
             var index = coreService.random(min, max);       
-            setup.last = setup.config.repeat ? s.nums[index] : s.nums.splice(index, 1).pop();               
+            setup.last = setup.config.repeat ?
+coreService.getByIndex(index) : coreService.getAndRemoveByIndex(index);               
+
             setup.results.push(setup.last);
             setup.enableButton = true;
 
@@ -2907,7 +2933,6 @@ app.config(function ($routeProvider) {
 
 });
 
-
 app.controller('NumberController', ['sorteiaaiService', function(service){
     var number = this;
 
@@ -2933,27 +2958,12 @@ app.controller('NumberController', ['sorteiaaiService', function(service){
         number.config.show = false;
         service.setup(number);
     };
-
-    /*$http.get('/store-products.json')
-    .success(function(data){
-        store.products = data;
-    });*/
-
 }]);
 
 app.controller('HomeController', ['$http', function($http){
     var home = this;
 
 }]);
-
-    /*app.controller('NumberController', ['$scope','$http', function($scope, $http){
-        var numbers = this;
-
-        $http.get('/store-products.json')
-        .success(function(data){
-            store.products = data;
-        });
-}]);*/
 
 app.controller('ListController', function() {
     this.review = {};
