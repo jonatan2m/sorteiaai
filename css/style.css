@@ -29,3 +29,7 @@ body {
 .vertical-align{
 	padding-top: 28px;
 }
+
+.input-number{
+	width: 50px;
+}

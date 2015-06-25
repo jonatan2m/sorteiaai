@@ -3,66 +3,60 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<div class="row">
-					<h4>Defina a configuração do sorteio:</h4>
-					<div class="col-md-2">
-						<label for="min_range">Início</label>
-						<input type="number" class="form-control" placeholder="Início" min="0" ng-model="number.config.begin" id="min_range" />
-					</div>
-					<div class="col-md-2">
-						<label for="max_range">Fim</label>
-						<input type="number" class="form-control" min="0" placeholder="Fim" ng-model="number.config.end" id="max_range" />
-					</div>
-					<div class="col-md-2">
-						<div class="vertical-align">								
-							<input type="checkbox" id="repeatNumber" ng-model="number.config.repeat" />
-							<label for="repeatNumber">Repetir números</label>
-						</div>
-					</div>
-					<div class="col-md-2">
-						<div class="vertical-align">								
-							<input type="checkbox" id="autosort" ng-model="number.config.auto" />
-							<label for="autosort">Sorteio Automático</label>
-						</div>
+					
+					<div class="col-md-12">
+						<h4>Configuração do sorteio:</h4>
+						Sortear números 
+						<label>de</label>						
+						<input type="number" class="input-number" placeholder="Início" min="0" ng-model="number.config.begin" id="min_range" />
+						<label>até</label>
+						<input type="number" class="input-number" min="0" placeholder="Fim" ng-model="number.config.end" id="max_range" /> 
+						<input type="checkbox" id="repeatNumber" ng-model="number.config.repeat" />
+						<label ng-if="number.config.repeat === false" for="repeatNumber">sem repeti-los.</label>
+						<label ng-if="number.config.repeat" for="repeatNumber">repetindo os números.</label>
+					</div>										
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<input type="checkbox" id="autosort" ng-model="number.config.auto" />
+						<label for="autosort">Sortear números automaticamente</label>						
 					</div>
 				</div>
-			</p>
-			<div class="row" ng-show="number.config.auto">
-				<h4>Configuração para sorteio automático</h4>
-				<div class="col-md-4">
-					<label for="autoLimit">Quantidade de números sorteados</label>
-					<input type="number" class="form-control" min="1" step="1" ng-model="number.config.autoLimit" id="autoLimit" />
-				</div>
-				<div class="col-md-4">
-					<label for="ticksPerSecond">Intervalo em segundos</label>
-					<input type="number" min="1" max="5" step="1" class="form-control" ng-model="number.config.ticksPerSecond" id="ticksPerSecond" />
+				<div class="row" ng-show="number.config.auto">
+					<div class="col-md-12">
+						Sortear <input type="number" class="input-number" min="1" step="1" ng-model="number.config.autoLimit" id="autoLimit" />
+						números com intervalo de <input type="number" min="1" max="5" step="1" class="input-number" ng-model="number.config.ticksPerSecond" id="ticksPerSecond" />
+						<label ng-if="number.config.ticksPerSecond <= 1" for="repeatNumber">segundo.</label>
+						<label ng-if="number.config.ticksPerSecond > 1" for="repeatNumber">segundos.</label>						
+					</div>
+				</div>			
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<input type="button" id="btnRaffle" ng-click="number.start()" class="btn btn-primary btn-lg"  value="Começar" />
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<input type="button" id="btnRaffle" ng-click="number.start()" class="btn btn-primary btn-lg"  value="Começar" />
-			
-		</div>
-	</section>
+		</section>
 
-	<section ng-hide="number.config.show" class="content">
-		<label class="last-number">{{number.last}}</label>
-		<div>			
-			<input type="button" id="btnRaffle" ng-click="number.next()" ng-disabled="!number.enableButton" class="btn btn-primary btn-lg"  value="Sortear" />
-		</div>
-		<div class="panel panel-default result-number">
-		<h3>Resultado:</h3>
-			<div class="panel-body">
-				<div class="row">			
-					<div>
-						<ul>
-							<li ng-repeat="r in number.results">{{r}}</li>
-						</ul>
+		<section ng-hide="number.config.show" class="content">
+			<label class="last-number">{{number.last}}</label>
+			<div>			
+				<input type="button" id="btnRaffle" ng-click="number.next()" ng-disabled="!number.enableButton" class="btn btn-primary btn-lg"  value="Sortear" />
+			</div>
+			<div class="panel panel-default result-number">
+				<h3>Resultado:</h3>
+				<div class="panel-body">
+					<div class="row">			
+						<div>
+							<ul>
+								<li ng-repeat="r in number.results">{{r}}</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div>
-			<!--<input type="button" id="btnRaffle" class="btn btn-lg" data-bind="click: newRaffle" value="Criar Sorteio" />-->
-		</div>		
-	</section>
-</div>
+			<div>
+				<!--<input type="button" id="btnRaffle" class="btn btn-lg" data-bind="click: newRaffle" value="Criar Sorteio" />-->
+			</div>		
+		</section>
+	</div>
