@@ -2770,9 +2770,7 @@ if (window.jasmine || window.mocha) {
 
 
 })(window, window.angular);
-;var app = angular.module('sorteiaai', ['ngRoute']);
-
-app.service('coreService', function (){
+;app.service('coreService', function (){
 
     var core = {};
     
@@ -2822,6 +2820,10 @@ app.service('coreService', function (){
         return nums[core.random(min, max)];                      
     };
 
+    core.getList = function (){
+        return nums;
+    };
+
     core.getByIndex = function (index){
         return nums[index];
     };
@@ -2835,8 +2837,7 @@ app.service('coreService', function (){
     };
 
     return core;
-});
-
+});;var app = angular.module('sorteiaai', ['ngRoute']);
 
 app.service('sorteiaaiService', function(coreService, $timeout, $q) {
     var s = {};    
