@@ -2770,6 +2770,8 @@ if (window.jasmine || window.mocha) {
 
 
 })(window, window.angular);
+;var app = angular.module('sorteiaai', ['ngRoute']);
+
 ;app.service('coreService', function (){
 
     var core = {};
@@ -2837,9 +2839,7 @@ if (window.jasmine || window.mocha) {
     };
 
     return core;
-});;var app = angular.module('sorteiaai', ['ngRoute']);
-
-app.service('sorteiaaiService', function(coreService, $timeout, $q) {
+});;app.service('sorteiaaiService', function(coreService, $timeout, $q) {
     var s = {};    
     
     s.remove = false;    
