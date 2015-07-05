@@ -2789,56 +2789,79 @@ if (window.jasmine || window.mocha) {
     }
 
     core.setup = function (begin, end){
-        for(var i = begin; i <= end; i++){
-            nums.push(i);
-        }
-        total = nums.length;
-    };
 
-    core.reset = function (){
-        nums = [];
-        total = 0;
-    };
-
-    core.shuffle = function() {
-        var N = nums.length;
-        if(N === 1) return nums;
-
-        for (var i = 0; i < N; i++) {
-            var r = core.random(i + 1);
-            swap(nums, i, r);
-        }
-        return nums;
-    };    
-
-    core.random = function(min, max) {
-        if(max)
-            return Math.floor(Math.random() * (max - min) + min);
+        if(Array.isArray(begin))
+            nums = begin;
         else
-            return Math.floor(Math.random() * min);        
-    };
+            for(var i = begin; i <= end; i++)
+                nums.push(i);                        
 
-    core.getRandomInList = function (min, max){
-        return nums[core.random(min, max)];                      
-    };
+            total = nums.length;
+        };
 
-    core.getList = function (){
-        return nums;
-    };
+        core.reset = function (){
+            nums = [];
+            total = 0;
+        };
 
-    core.getByIndex = function (index){
-        return nums[index];
-    };
+        core.shuffle = function() {
+            var N = nums.length;
+            if(N === 1) return nums;
 
-    core.getAndRemoveByIndex = function (index){
-        return nums.splice(index, 1).pop();
-    };
+            for (var i = 0; i < N; i++) {
+                var r = core.random(i + 1);
+                swap(nums, i, r);
+            }
+            return nums;
+        };    
 
-    core.getLength = function (){
-        return nums.length;       
-    };
+        core.random = function(min, max) {
+            if(max)
+                return Math.floor(Math.random() * (max - min) + min);
+            else
+                return Math.floor(Math.random() * min);        
+        };
 
-    return core;
+        core.getRandomInList = function (min, max){
+            return nums[core.random(min, max)];                      
+        };
+
+        core.getList = function (){
+            return nums;
+        };
+
+        core.getByIndex = function (index){
+            return nums[index];
+        };
+
+        core.getAndRemoveByIndex = function (index){
+            return nums.splice(index, 1).pop();
+        };
+
+        core.getLength = function (){
+            return nums.length;       
+        };
+
+        return core;
+    });;app.service('listService', function (){
+	var utils = {};
+
+	utils.convertInputTextToArray = function(input){
+
+		if(input === undefined)
+			throw Error('input is undefined');
+
+		return input
+			.trim()
+			.split('\n')
+			.filter(function(value){
+				value = value.trim();
+				return value.length > 0 &&
+						value !== "";
+			});
+	};
+
+	return utils;
 });;app.service('sorteiaaiService', function(coreService, $timeout, $q) {
     var s = {};    
     
@@ -2853,11 +2876,24 @@ if (window.jasmine || window.mocha) {
         coreService.reset();                                
     };
 
-    var _setup = function (data) {
+
+
+    var number = function (data) {
 
         data.enableButton = !data.enableButton;
 
         coreService.setup(data.config.begin, data.config.end);
+
+        data.config.show = false;
+
+        setup = data;
+    };
+
+    var list = function (data) {
+
+        data.enableButton = !data.enableButton;
+
+        coreService.setup(data.input);
 
         data.config.show = false;
 
@@ -2893,7 +2929,8 @@ if (window.jasmine || window.mocha) {
         }else{
             var index = coreService.random(min, max);       
             setup.last = setup.config.repeat ?
-coreService.getByIndex(index) : coreService.getAndRemoveByIndex(index);               
+            coreService.getByIndex(index) : coreService
+                .getAndRemoveByIndex(index);               
 
             setup.results.push(setup.last);
             setup.enableButton = true;
@@ -2912,7 +2949,8 @@ coreService.getByIndex(index) : coreService.getAndRemoveByIndex(index);
     }
 
     return {
-        setup: _setup,
+        number: number,
+        list: list,
         reset: _reset,
         next: _next
     };
@@ -2929,10 +2967,44 @@ app.config(function ($routeProvider) {
         controller: "NumberController",
         templateUrl: "views/number.html"
     });
+    $routeProvider.when("/list", {
+        controller: "ListController",
+        templateUrl: "views/list.html"
+    });
 
     $routeProvider.otherwise({ redirectTo: "/home" });
 
 });
+
+app.controller('ListController', ['sorteiaaiService', 'listService',
+ function(service, listService){
+    var list = this;
+
+    list.config = {        
+        repeat : false,
+        show : true,
+        auto : false,
+        autoLimit : 2,
+        ticksPerSecond : 1
+    };
+
+    list.enableButton = false;    
+    list.last = '--';
+    list.results = [];
+    list.input = [];
+
+    list.inputValues = "";
+
+    list.next = function (){
+        service.next();
+    };
+
+    list.start = function (){
+        list.input = listService.convertInputTextToArray(list.inputValues);
+        list.config.show = false;
+        service.list(list);
+    };    
+}]);
 
 app.controller('NumberController', ['sorteiaaiService', function(service){
     var number = this;
@@ -2945,7 +3017,7 @@ app.controller('NumberController', ['sorteiaaiService', function(service){
         auto : false,
         autoLimit : 2,
         ticksPerSecond : 1
-    };
+    };    
 
     number.enableButton = false;    
     number.last = '--';
@@ -2957,7 +3029,7 @@ app.controller('NumberController', ['sorteiaaiService', function(service){
 
     number.start = function () {
         number.config.show = false;
-        service.setup(number);
+        service.number(number);
     };
 }]);
 
@@ -2965,13 +3037,3 @@ app.controller('HomeController', ['$http', function($http){
     var home = this;
 
 }]);
-
-app.controller('ListController', function() {
-    this.review = {};
-
-    this.addReview = function(product) {
-        product.reviews.push(this.review);
-
-        this.review = {};
-    };
-});

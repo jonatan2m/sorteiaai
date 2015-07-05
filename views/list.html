@@ -1,0 +1,60 @@
+<div  ng-controller="ListController as list">
+	<section class="content" ng-show="list.config.show">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Sorteio com Lista</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3">
+						<div class="col-md-12">		
+							<label class="label-number">Insira a lista para sorteio. </br> Um item por linha </label>
+						</div>
+						<div class="col-md-12">	
+							<textarea wrap="hard" cols="5" class="input-textarea" rows="10"  ng-model="list.inputValues"></textarea>
+						</div>
+						<div class="col-md-12">
+							<input type="checkbox" id="repeatNumber" ng-model="list.config.repeat" />
+							<label class="label-number" for="repeatNumber">Com repetição.</label>
+						</div>
+						<div class="col-md-12">
+							<input type="checkbox" id="autosort" ng-model="list.config.auto" />
+							<label for="autosort">Sortear números automaticamente</label>			
+						</div>
+						<div class="col-md-12" ng-show="list.config.auto">
+							<label class="label-number">Quantidade de números à sortear: </label>
+							<input type="number" class="input-number" min="1" step="1" ng-model="list.config.autoLimit" id="autoLimit" />
+						</div>
+						<div class="col-md-12" ng-show="list.config.auto">
+							<label class="label-number">Intervalo entre os sorteios: </label>
+							<input type="number" min="1" max="5" step="1" class="input-number" ng-model="list.config.ticksPerSecond" id="ticksPerSecond" />
+							<label ng-if="list.config.ticksPerSecond <= 1" for="repeatNumber">segundo.</label>
+							<label ng-if="list.config.ticksPerSecond > 1" for="repeatNumber">segundos.</label>	
+						</div>
+						<div class="">
+							<input type="button" id="btnRaffle" ng-click="list.start()" class="btn btn-primary btn-lg"  value="Começar" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section ng-hide="list.config.show" class="content">
+		<label class="last-number">{{list.last}}</label>
+		<div>			
+			<input type="button" id="btnRaffle" ng-click="list.next()" ng-disabled="!list.enableButton" class="btn btn-primary btn-lg"  value="Sortear" />
+		</div>
+		<div class="panel panel-default result-number">
+			<h3>Resultado:</h3>
+			<div class="panel-body">
+				<div class="row">			
+					<div>
+						<ul>
+							<li ng-repeat="r in list.results track by $index">{{r}}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</section>
+</div>

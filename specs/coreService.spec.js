@@ -1,4 +1,4 @@
-describe('Core Service - Numbers', function() {
+describe('Core Service', function() {
 	
 	var service;
 
@@ -54,6 +54,13 @@ describe('Core Service - Numbers', function() {
 		service.reset();
 		
 		expect(0).toBe(service.getLength());		
+	});
+
+	it("should define setup with array", function() {
+		var begin = [1,2,3,4,5];
+		
+		service.setup(begin);
+		expect(5).toBe(service.getLength());
 	});
 
 });
