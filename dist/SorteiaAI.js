@@ -2790,6 +2790,8 @@ if (window.jasmine || window.mocha) {
 
     core.setup = function (begin, end){
 
+        core.reset();
+
         if(Array.isArray(begin))
             nums = begin;
         else
