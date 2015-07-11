@@ -2864,6 +2864,32 @@ if (window.jasmine || window.mocha) {
 	};
 
 	return utils;
+});;app.service('numberDataService', function (){
+var client = new WindowsAzure
+	.MobileServiceClient('https://sorteiaai.azure-mobile.net/',
+		'MnYlGvSJdtEuWfqOgPTgbgLeQVizvc73');
+
+	function getAll(){
+		var table = client.getTable('number');
+
+		table.read().then(function(data){
+			console.log(data);
+		});
+	}
+
+	function insert(){
+		var table = client.getTable('number');
+
+		table.insert({
+			alias: 'my-teste',
+			data: '{result:[1,2,3], auto: true}'
+		});
+	}
+
+	return {
+		get: getAll,
+		insert: insert
+	};
 });;app.service('sorteiaaiService', function(coreService, $timeout, $q) {
     var s = {};    
     
@@ -2932,7 +2958,7 @@ if (window.jasmine || window.mocha) {
             var index = coreService.random(min, max);       
             setup.last = setup.config.repeat ?
             coreService.getByIndex(index) : coreService
-                .getAndRemoveByIndex(index);               
+            .getAndRemoveByIndex(index);               
 
             setup.results.push(setup.last);
             setup.enableButton = true;
@@ -2978,8 +3004,9 @@ app.config(function ($routeProvider) {
 
 });
 
-app.controller('ListController', ['sorteiaaiService', 'listService',
- function(service, listService){
+app.controller('ListController', ['sorteiaaiService',
+   'listService', 'numberDataService', 
+   function(service, listService, numberDataService){
     var list = this;
 
     list.config = {        
@@ -3001,11 +3028,17 @@ app.controller('ListController', ['sorteiaaiService', 'listService',
         service.next();
     };
 
-    list.start = function (){
+    list.start = function (){        
+        
+        numberDataService.insert();
+        numberDataService.get();
         list.input = listService.convertInputTextToArray(list.inputValues);
         list.config.show = false;
         service.list(list);
-    };    
+    };
+    list.save = function (){
+
+    };
 }]);
 
 app.controller('NumberController', ['sorteiaaiService', function(service){

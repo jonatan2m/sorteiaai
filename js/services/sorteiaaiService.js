@@ -66,7 +66,7 @@ app.service('sorteiaaiService', function(coreService, $timeout, $q) {
             var index = coreService.random(min, max);       
             setup.last = setup.config.repeat ?
             coreService.getByIndex(index) : coreService
-                .getAndRemoveByIndex(index);               
+            .getAndRemoveByIndex(index);               
 
             setup.results.push(setup.last);
             setup.enableButton = true;
@@ -112,8 +112,9 @@ app.config(function ($routeProvider) {
 
 });
 
-app.controller('ListController', ['sorteiaaiService', 'listService',
- function(service, listService){
+app.controller('ListController', ['sorteiaaiService',
+   'listService', 'numberDataService', 
+   function(service, listService, numberDataService){
     var list = this;
 
     list.config = {        
@@ -135,11 +136,17 @@ app.controller('ListController', ['sorteiaaiService', 'listService',
         service.next();
     };
 
-    list.start = function (){
+    list.start = function (){        
+        
+        numberDataService.insert();
+        numberDataService.get();
         list.input = listService.convertInputTextToArray(list.inputValues);
         list.config.show = false;
         service.list(list);
-    };    
+    };
+    list.save = function (){
+
+    };
 }]);
 
 app.controller('NumberController', ['sorteiaaiService', function(service){
