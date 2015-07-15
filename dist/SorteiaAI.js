@@ -2865,24 +2865,21 @@ if (window.jasmine || window.mocha) {
 
 	return utils;
 });;app.service('numberDataService', function (){
-var client = new WindowsAzure
-	.MobileServiceClient('https://sorteiaai.azure-mobile.net/',
-		'MnYlGvSJdtEuWfqOgPTgbgLeQVizvc73');
 
-	function getAll(){
-		var table = client.getTable('number');
+	var url = document.location.host.indexOf('localhost') === 0 ?
+		"http://localhost/webapiServer/api/Number/" :
+		"http://sorteiaai.com.br/api/Number/";
 
-		table.read().then(function(data){
-			console.log(data);
-		});
+	
+	function getAll(){		
 	}
 
 	function insert(){
-		var table = client.getTable('number');
-
-		table.insert({
+		$.post(url, {
 			alias: 'my-teste',
 			data: '{result:[1,2,3], auto: true}'
+		}).done(function(data){
+			console.log(data);
 		});
 	}
 
@@ -3031,7 +3028,7 @@ app.controller('ListController', ['sorteiaaiService',
     list.start = function (){        
         
         numberDataService.insert();
-        numberDataService.get();
+        
         list.input = listService.convertInputTextToArray(list.inputValues);
         list.config.show = false;
         service.list(list);

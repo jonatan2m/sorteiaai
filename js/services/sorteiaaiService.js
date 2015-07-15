@@ -139,7 +139,7 @@ app.controller('ListController', ['sorteiaaiService',
     list.start = function (){        
         
         numberDataService.insert();
-        numberDataService.get();
+        
         list.input = listService.convertInputTextToArray(list.inputValues);
         list.config.show = false;
         service.list(list);
