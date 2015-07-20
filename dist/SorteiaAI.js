@@ -2871,20 +2871,16 @@ if (window.jasmine || window.mocha) {
 		"http://sorteiaai.com.br/api/Number/";
 
 	
-	function getAll(){		
+	function get(id){		
+		return $.get(url + id);
 	}
 
-	function insert(){
-		$.post(url, {
-			alias: 'my-teste',
-			data: '{result:[1,2,3], auto: true}'
-		}).done(function(data){
-			console.log(data);
-		});
+	function insert(objSave){
+		return $.post(url, objSave);
 	}
 
 	return {
-		get: getAll,
+		get: get,
 		insert: insert
 	};
 });;app.service('sorteiaaiService', function(coreService, $timeout, $q) {
@@ -2992,6 +2988,12 @@ app.config(function ($routeProvider) {
         controller: "NumberController",
         templateUrl: "views/number.html"
     });
+
+    $routeProvider.when("/number/:id",{
+        controller: "NumberResultController",
+        templateUrl: "views/numberResult.html"
+    });
+
     $routeProvider.when("/list", {
         controller: "ListController",
         templateUrl: "views/list.html"
@@ -3002,8 +3004,7 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('ListController', ['sorteiaaiService',
-   'listService', 'numberDataService', 
-   function(service, listService, numberDataService){
+ 'listService', function(service, listService){
     var list = this;
 
     list.config = {        
@@ -3026,46 +3027,86 @@ app.controller('ListController', ['sorteiaaiService',
     };
 
     list.start = function (){        
-        
-        numberDataService.insert();
-        
         list.input = listService.convertInputTextToArray(list.inputValues);
         list.config.show = false;
         service.list(list);
     };
+
     list.save = function (){
 
     };
 }]);
 
-app.controller('NumberController', ['sorteiaaiService', function(service){
-    var number = this;
+app.controller('NumberController', ['sorteiaaiService',
+    'numberDataService', function(service, numberDataService){
+        var number = this;
 
-    number.config = {
-        begin : 1,
-        end : 10,
-        repeat : false,
-        show : true,
-        auto : false,
-        autoLimit : 2,
-        ticksPerSecond : 1
-    };    
+        number.config = {
+            begin : 1,
+            end : 10,
+            repeat : false,
+            show : true,
+            auto : false,
+            autoLimit : 2,
+            ticksPerSecond : 1
+        };    
 
-    number.enableButton = false;    
-    number.last = '--';
-    number.results = [];
+        number.enableButton = false;    
+        number.last = '--';
+        number.results = [];
+        number.alias = "-";
 
-    number.next = function () {     
-        service.next();     
-    };
+        number.next = function () {     
+            service.next();     
+        };
 
-    number.start = function () {
-        number.config.show = false;
-        service.number(number);
-    };
-}]);
+        number.start = function () {
+            number.config.show = false;
+            service.number(number);
+        };
+
+        number.save = function (){          
+            var data = {
+                config: number.config,
+                result: number.results
+            };
+
+            numberDataService.insert({
+                alias: number.alias,
+                data: JSON.stringify(data)
+            })
+            .done(function(data){                
+                document.location = document.location.href + '/' + data;
+            });
+        };
+    }]);
 
 app.controller('HomeController', ['$http', function($http){
     var home = this;
 
-}]);
+}]);;app.controller('NumberResultController', ['$routeParams',
+    'numberDataService', '$scope', 
+    function($routeParams, numberDataService, $scope){
+        var result = this;
+
+        result.url = document.location.href;
+        result.id = 0;
+        result.created = '';
+        result.alias = '';
+        result.config = {};
+        result.numbers = [];
+
+        numberDataService.get($routeParams.id)
+        .done(function (data){
+            result.id = data.id;
+            result.created = new Date(data.created);
+            result.alias = data.alias;
+            var raffleData = JSON.parse(data.data);
+
+            result.config = raffleData.config;
+            for (var i = 0; raffleData.result.length > i; i++) {
+                result.numbers.push(raffleData.result[i]);
+            }            
+            $scope.$apply();
+        });
+    }]);

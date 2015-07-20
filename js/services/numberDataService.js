@@ -5,20 +5,16 @@ app.service('numberDataService', function (){
 		"http://sorteiaai.com.br/api/Number/";
 
 	
-	function getAll(){		
+	function get(id){		
+		return $.get(url + id);
 	}
 
-	function insert(){
-		$.post(url, {
-			alias: 'my-teste',
-			data: '{result:[1,2,3], auto: true}'
-		}).done(function(data){
-			console.log(data);
-		});
+	function insert(objSave){
+		return $.post(url, objSave);
 	}
 
 	return {
-		get: getAll,
+		get: get,
 		insert: insert
 	};
 });

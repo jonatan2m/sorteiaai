@@ -1,0 +1,14 @@
+<div  ng-controller="NumberResultController as numberResult">
+	<div class="row">			
+		Resultado
+		<div>			
+			<p>Url para acesso: 			
+			{{numberResult.url}}</p>
+			<p>Data do sorteio: {{numberResult.created}}</p>
+			<p>Números:</p>			
+			<ul>
+				<li ng-repeat="r in numberResult.numbers track by $index">{{r}}</li>
+			</ul>
+		</div>
+	</div>	
+</div>

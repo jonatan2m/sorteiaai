@@ -11,7 +11,8 @@ module.exports = function(grunt) {
               'node_modules/angular-route/angular-route.min.js',
               'node_modules/angular-mocks/angular-mocks.js',
               'js/app.js',              
-              'js/services/*.js'
+              'js/services/*.js',
+              'js/controllers/*.js'
               ],
         dest: 'dist/<%= pkg.name %>.js'
       }
@@ -66,7 +67,8 @@ module.exports = function(grunt) {
       'node_modules/angular-route/angular-route.min.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'js/app.js',
-      'js/services/*.js'
+      'js/services/*.js',
+      'js/controllers/*.js'
       ],
       // Your Jasmine spec files
       options: {
@@ -79,6 +81,7 @@ module.exports = function(grunt) {
       'Gruntfile.js',
       'js/app.js',
       'js/services/*.js',
+      'js/controllers/*.js',
       'specs/*.js'        
       ],
       options: {
@@ -99,7 +102,7 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['<%= jshint.files %>', 'js/app.js', 'js/services/*.js', 'specs/*.js'],
+      files: ['<%= jshint.files %>', 'js/app.js', 'js/services/*.js', 'js/controllers/*.js', 'specs/*.js'],
       tasks: ['jshint', 'jasmine']
     }
   });

@@ -103,6 +103,12 @@ app.config(function ($routeProvider) {
         controller: "NumberController",
         templateUrl: "views/number.html"
     });
+
+    $routeProvider.when("/number/:id",{
+        controller: "NumberResultController",
+        templateUrl: "views/numberResult.html"
+    });
+
     $routeProvider.when("/list", {
         controller: "ListController",
         templateUrl: "views/list.html"
@@ -113,8 +119,7 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('ListController', ['sorteiaaiService',
-   'listService', 'numberDataService', 
-   function(service, listService, numberDataService){
+ 'listService', function(service, listService){
     var list = this;
 
     list.config = {        
@@ -137,44 +142,59 @@ app.controller('ListController', ['sorteiaaiService',
     };
 
     list.start = function (){        
-        
-        numberDataService.insert();
-        
         list.input = listService.convertInputTextToArray(list.inputValues);
         list.config.show = false;
         service.list(list);
     };
+
     list.save = function (){
 
     };
 }]);
 
-app.controller('NumberController', ['sorteiaaiService', function(service){
-    var number = this;
+app.controller('NumberController', ['sorteiaaiService',
+    'numberDataService', function(service, numberDataService){
+        var number = this;
 
-    number.config = {
-        begin : 1,
-        end : 10,
-        repeat : false,
-        show : true,
-        auto : false,
-        autoLimit : 2,
-        ticksPerSecond : 1
-    };    
+        number.config = {
+            begin : 1,
+            end : 10,
+            repeat : false,
+            show : true,
+            auto : false,
+            autoLimit : 2,
+            ticksPerSecond : 1
+        };    
 
-    number.enableButton = false;    
-    number.last = '--';
-    number.results = [];
+        number.enableButton = false;    
+        number.last = '--';
+        number.results = [];
+        number.alias = "-";
 
-    number.next = function () {     
-        service.next();     
-    };
+        number.next = function () {     
+            service.next();     
+        };
 
-    number.start = function () {
-        number.config.show = false;
-        service.number(number);
-    };
-}]);
+        number.start = function () {
+            number.config.show = false;
+            service.number(number);
+        };
+
+        number.save = function (){          
+            var data = {
+                config: number.config,
+                result: number.results
+            };
+
+            numberDataService.insert({
+                alias: number.alias,
+                data: JSON.stringify(data)
+            })
+            .done(function(data){                
+                document.location = document.location.href + '/' + data;
+            });
+        };
+    }]);
 
 app.controller('HomeController', ['$http', function($http){
     var home = this;
