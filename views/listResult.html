@@ -1,0 +1,39 @@
+<div  ng-controller="ListResultController as listResult">
+	<section class="content" >
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Resultado do Sorteio</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3">
+						<label class="label-number">Data do Sorteio: </label>	{{listResult.created}}
+					</div>
+					<div class="col-md-6 col-md-offset-3">
+						<label class="label-number">Número do Sorteio: </label>	{{listResult.id}}
+					</div>
+					<div class="col-md-6 col-md-offset-3">
+						<label class="label-number">Página do Sorteio: </label>	{{listResult.url}}
+					</div>
+					<div class="col-md-6 col-md-offset-3">
+						<label class="label-number">Detalhes do Sorteio: </label>	
+						{{listResult.configInfo}}
+					</div>
+					<div class="col-md-6 col-md-offset-3">
+						<label class="label-number result-number">
+							Valores sorteados: 
+							<ul>
+								<li ng-repeat="r in listResult.values track by $index">{{r}}</li>
+							</ul>
+						</label>
+					</div>
+					<div class="col-md-6 col-md-offset-3">
+						<label class="label-number">Valores que também participaram do sorteio: </label>
+						</br>	
+						<textarea wrap="hard" cols="5" class="input-textarea ng-pristine ng-valid ng-touched" rows="10" ng-model="listResult.remaingValues"></textarea>						
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

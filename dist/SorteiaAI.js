@@ -2845,7 +2845,26 @@ if (window.jasmine || window.mocha) {
         };
 
         return core;
-    });;app.service('listService', function (){
+    });;app.service('listDataService', function (){
+
+	var url = document.location.host.indexOf('localhost') === 0 ?
+		"http://localhost/webapiServer/api/List/" :
+		"http://sorteiaai.com.br/api/List/";
+
+	
+	function get(id){		
+		return $.get(url + id);
+	}
+
+	function insert(objSave){
+		return $.post(url, objSave);
+	}
+
+	return {
+		get: get,
+		insert: insert
+	};
+});;app.service('listService', function (){
 	var utils = {};
 
 	utils.convertInputTextToArray = function(input){
@@ -2999,43 +3018,60 @@ app.config(function ($routeProvider) {
         templateUrl: "views/list.html"
     });
 
-    $routeProvider.otherwise({ redirectTo: "/home" });
+    $routeProvider.when("/list/:id", {
+        controller: "ListResultController",
+        templateUrl: "views/ListResult.html"
+    });
+
+$routeProvider.otherwise({ redirectTo: "/home" });
 
 });
 
 app.controller('ListController', ['sorteiaaiService',
- 'listService', function(service, listService){
-    var list = this;
+    'listService', 'listDataService', function(service, listService, listDataService){
+        var list = this;
 
-    list.config = {        
-        repeat : false,
-        show : true,
-        auto : false,
-        autoLimit : 2,
-        ticksPerSecond : 1
-    };
+        list.config = {        
+            repeat : false,
+            show : true,
+            auto : false,
+            autoLimit : 2,
+            ticksPerSecond : 1
+        };
 
-    list.enableButton = false;    
-    list.last = '--';
-    list.results = [];
-    list.input = [];
+        list.enableButton = false;    
+        list.last = '--';
+        list.results = [];
+        list.input = [];
+        list.alias = '-';
 
-    list.inputValues = "";
+        list.inputValues = "";
 
-    list.next = function (){
-        service.next();
-    };
+        list.next = function (){
+            service.next();
+        };
 
-    list.start = function (){        
-        list.input = listService.convertInputTextToArray(list.inputValues);
-        list.config.show = false;
-        service.list(list);
-    };
+        list.start = function (){        
+            list.input = listService.convertInputTextToArray(list.inputValues);
+            list.config.show = false;
+            service.list(list);
+        };
 
-    list.save = function (){
+        list.save = function (){
+            var data = {
+                config: list.config,
+                result: list.results
+            };
 
-    };
-}]);
+            listDataService.insert({
+                alias: list.alias,
+                data: JSON.stringify(data),
+                remaingValues: JSON.stringify(list.input)
+            }).done(function(id){                
+                document.location = document.location.href + '/' + id;
+            });
+        };
+    }]);
 
 app.controller('NumberController', ['sorteiaaiService',
     'numberDataService', function(service, numberDataService){
@@ -3075,8 +3111,8 @@ app.controller('NumberController', ['sorteiaaiService',
                 alias: number.alias,
                 data: JSON.stringify(data)
             })
-            .done(function(data){                
-                document.location = document.location.href + '/' + data;
+            .done(function(id){                
+                document.location = document.location.href + '/' + id;
             });
         };
     }]);
@@ -3084,7 +3120,48 @@ app.controller('NumberController', ['sorteiaaiService',
 app.controller('HomeController', ['$http', function($http){
     var home = this;
 
-}]);;app.controller('NumberResultController', ['$routeParams',
+}]);;app.controller('ListResultController', ['$routeParams',
+    'listDataService', '$scope', 
+    function($routeParams, listDataService, $scope){
+        var result = this;
+
+        result.url = document.location.href;
+        result.id = 0;
+        result.created = '';
+        result.alias = '';
+        result.config = {};
+        result.values = [];
+        result.configInfo = "";
+        result.remaingValues = [];
+
+        listDataService.get($routeParams.id)
+        .done(function (data){
+            result.id = data.id;
+            
+            result.created = data.created;
+            result.alias = data.alias;
+            var raffleData = JSON.parse(data.data);
+            result.remaingValues = JSON.parse(data.remaingValues).join('\n');
+
+            result.config = raffleData.config;
+
+            result.configInfo = "{{repeat}} repetição.";
+
+            for (var key in result.config){
+                result.configInfo = result.configInfo.replace("{" + key + "}",
+                    result.config[key]);
+            }
+
+            result.configInfo = result.configInfo.replace("{" + 
+            result.config.repeat + "}",
+                    result.config.repeat? "Com" : "Sem");
+            
+            for (var i = 0; raffleData.result.length > i; i++) {
+                result.values.push(raffleData.result[i]);
+            }            
+            $scope.$apply();
+        });
+    }]);;app.controller('NumberResultController', ['$routeParams',
     'numberDataService', '$scope', 
     function($routeParams, numberDataService, $scope){
         var result = this;

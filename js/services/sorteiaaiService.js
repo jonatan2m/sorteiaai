@@ -114,43 +114,60 @@ app.config(function ($routeProvider) {
         templateUrl: "views/list.html"
     });
 
-    $routeProvider.otherwise({ redirectTo: "/home" });
+    $routeProvider.when("/list/:id", {
+        controller: "ListResultController",
+        templateUrl: "views/ListResult.html"
+    });
+
+$routeProvider.otherwise({ redirectTo: "/home" });
 
 });
 
 app.controller('ListController', ['sorteiaaiService',
- 'listService', function(service, listService){
-    var list = this;
+    'listService', 'listDataService', function(service, listService, listDataService){
+        var list = this;
 
-    list.config = {        
-        repeat : false,
-        show : true,
-        auto : false,
-        autoLimit : 2,
-        ticksPerSecond : 1
-    };
+        list.config = {        
+            repeat : false,
+            show : true,
+            auto : false,
+            autoLimit : 2,
+            ticksPerSecond : 1
+        };
 
-    list.enableButton = false;    
-    list.last = '--';
-    list.results = [];
-    list.input = [];
+        list.enableButton = false;    
+        list.last = '--';
+        list.results = [];
+        list.input = [];
+        list.alias = '-';
 
-    list.inputValues = "";
+        list.inputValues = "";
 
-    list.next = function (){
-        service.next();
-    };
+        list.next = function (){
+            service.next();
+        };
 
-    list.start = function (){        
-        list.input = listService.convertInputTextToArray(list.inputValues);
-        list.config.show = false;
-        service.list(list);
-    };
+        list.start = function (){        
+            list.input = listService.convertInputTextToArray(list.inputValues);
+            list.config.show = false;
+            service.list(list);
+        };
 
-    list.save = function (){
+        list.save = function (){
+            var data = {
+                config: list.config,
+                result: list.results
+            };
 
-    };
-}]);
+            listDataService.insert({
+                alias: list.alias,
+                data: JSON.stringify(data),
+                remaingValues: JSON.stringify(list.input)
+            }).done(function(id){                
+                document.location = document.location.href + '/' + id;
+            });
+        };
+    }]);
 
 app.controller('NumberController', ['sorteiaaiService',
     'numberDataService', function(service, numberDataService){
@@ -190,8 +207,8 @@ app.controller('NumberController', ['sorteiaaiService',
                 alias: number.alias,
                 data: JSON.stringify(data)
             })
-            .done(function(data){                
-                document.location = document.location.href + '/' + data;
+            .done(function(id){                
+                document.location = document.location.href + '/' + id;
             });
         };
     }]);
