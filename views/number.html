@@ -1,45 +1,45 @@
 <div  ng-controller="NumberController as number">
 	<section class="content" ng-show="number.config.show">
-
-
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<h3 class="panel-title">Sorteio de Números</h3>
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-md-6 col-md-offset-3">
-						<div class="col-md-6">
-							<label class="label-number">De: </label>						
-							<input type="number" class="input-number" placeholder="Início" min="0" ng-model="number.config.begin" id="min_range" />						
+					<form name="myForm" novalidate>
+						<div class="col-md-6 col-md-offset-3">
+							<div class="col-md-6">
+								<label class="label-number">De: </label>						
+								<input type="number" class="input-number" placeholder="Início" min="0" ng-model="number.config.begin" name="min_range" />		
+							</div>
+							<div class="col-md-6">
+								<label class="label-number">Até: </label>
+								<input type="number" class="input-number" min="{{number.config.begin + 1}}" placeholder="Fim" ng-model="number.config.end" id="max_range" /> 
+							</div>
+							<div class="col-md-12">
+								<input type="checkbox" id="repeatNumber" ng-model="number.config.repeat" />
+								<label class="label-number" for="repeatNumber">Com repetição.</label>
+							</div>
+							<div class="col-md-12">
+								<input type="checkbox" id="autosort" ng-model="number.config.auto" />
+								<label for="autosort">Sortear números automaticamente</label>			
+							</div>
+							<div class="col-md-12" ng-show="number.config.auto">
+								<label class="label-number">Quantidade de números à sortear: </label>
+								<input type="number" class="input-number" max="{{number.config.end - number.config.begin}}" min="1" step="1" ng-model="number.config.autoLimit" name="autoLimit" />
+							</div>
+							<div class="col-md-12" ng-show="number.config.auto">
+								<label class="label-number">Intervalo entre os sorteios: </label>
+								<input type="number" min="1" max="5" step="1" class="input-number" ng-model="number.config.ticksPerSecond" id="ticksPerSecond" />
+								<label ng-if="number.config.ticksPerSecond <= 1" for="repeatNumber">segundo.</label>
+								<label ng-if="number.config.ticksPerSecond > 1" for="repeatNumber">segundos.</label>	
+							</div>
+							<div class="">
+								<input type="button" id="btnRaffle" ng-click="number.start()" class="btn btn-primary btn-lg"  value="Começar" />
+							</div>
 						</div>
-						<div class="col-md-6">
-							<label class="label-number">Até: </label>
-							<input type="number" class="input-number" min="0" placeholder="Fim" ng-model="number.config.end" id="max_range" /> 
-						</div>
-						<div class="col-md-12">
-							<input type="checkbox" id="repeatNumber" ng-model="number.config.repeat" />
-							<label class="label-number" for="repeatNumber">Com repetição.</label>
-						</div>
-						<div class="col-md-12">
-							<input type="checkbox" id="autosort" ng-model="number.config.auto" />
-							<label for="autosort">Sortear números automaticamente</label>			
-						</div>
-						<div class="col-md-12" ng-show="number.config.auto">
-							<label class="label-number">Quantidade de números à sortear: </label>
-							<input type="number" class="input-number" min="1" step="1" ng-model="number.config.autoLimit" id="autoLimit" />
-						</div>
-						<div class="col-md-12" ng-show="number.config.auto">
-							<label class="label-number">Intervalo entre os sorteios: </label>
-							<input type="number" min="1" max="5" step="1" class="input-number" ng-model="number.config.ticksPerSecond" id="ticksPerSecond" />
-							<label ng-if="number.config.ticksPerSecond <= 1" for="repeatNumber">segundo.</label>
-							<label ng-if="number.config.ticksPerSecond > 1" for="repeatNumber">segundos.</label>	
-						</div>
-						<div class="">
-							<input type="button" id="btnRaffle" ng-click="number.start()" class="btn btn-primary btn-lg"  value="Começar" />
-						</div>
-					</div>
-				</div>
+					</div>					
+				</form>
 			</div>		
 		</div>
 	</section>
