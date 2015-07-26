@@ -94,3 +94,6 @@ input[type=checkbox]
 .raffle-card.suggestion{
 	background-color: rgba(44,83,158,1);
 }
+.error{
+	color: #f00;
+}

@@ -3039,7 +3039,7 @@ app.controller('ListController', ['sorteiaaiService',
             repeat : false,
             show : true,
             auto : false,
-            autoLimit : 2,
+            autoLimit : 1,
             ticksPerSecond : 1
         };
 
@@ -3048,6 +3048,7 @@ app.controller('ListController', ['sorteiaaiService',
         list.results = [];
         list.input = [];
         list.alias = '-';
+        list.fillText = '';
 
         list.inputValues = "";
 
@@ -3055,7 +3056,14 @@ app.controller('ListController', ['sorteiaaiService',
             service.next();
         };
 
-        list.start = function (){        
+        list.start = function (){
+            if(list.inputValues === ''){
+                list.fillText = 'Não encontramos itens na lista.';
+                return;
+            }else
+                list.fillText = '';
+
+
             list.input = listService.convertInputTextToArray(list.inputValues);
             list.config.show = false;
             service.list(list);
