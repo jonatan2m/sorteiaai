@@ -3003,6 +3003,10 @@ app.config(function ($routeProvider) {
         templateUrl: "views/home.html"
     });
 
+    $routeProvider.when("/about", {        
+        templateUrl: "views/about.html"
+    });
+
     $routeProvider.when("/number", {
         controller: "NumberController",
         templateUrl: "views/number.html"
