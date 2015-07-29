@@ -1,33 +1,52 @@
-<div  ng-controller="NumberResultController as numberResult">
-	<section class="content" >
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Resultado do Sorteio</h3>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-md-6 col-md-offset-3">
-						<label class="label-number">Data do Sorteio: </label>	{{numberResult.created}}
+<div class="content" ng-controller="NumberResultController as numberResult">
+	<div class="page-header">
+		<h1>Resultado do Sorteio</h1>
+	</div>	
+	<section >				
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-12">			
+					<div class="form-group">
+						<label class="label-number">Data do Sorteio: </label>
+						{{numberResult.created}}
 					</div>
-					<div class="col-md-6 col-md-offset-3">
+				</div>
+
+				<div class="col-md-12">			
+					<div class="form-group">
 						<label class="label-number">Número do Sorteio: </label>	{{numberResult.id}}
 					</div>
-					<div class="col-md-6 col-md-offset-3">
+				</div>
+
+
+				<div class="col-md-12">			
+					<div class="form-group">
 						<label class="label-number">Página do Sorteio: </label>	{{numberResult.url}}
 					</div>
-					<div class="col-md-6 col-md-offset-3">
+				</div>
+
+				<div class="col-md-12">			
+					<div class="form-group">
 						<label class="label-number">Detalhes do Sorteio: </label>	
 						{{numberResult.configInfo}}
 					</div>
-					<div class="col-md-6 col-md-offset-3">
+				</div>
+
+				<div class="col-md-12">			
+					<div class="form-group">
 						<label class="label-number result-number">
-							Números sorteados: 
+						Números na ordem que foram sorteados: 
 							<ul>
 								<li ng-repeat="r in numberResult.numbers track by $index">{{r}}</li>
 							</ul>
 						</label>
 					</div>
 				</div>
+
+
+				<div class="col-md-6 col-md-offset-3">
+
+				</div>					
 			</div>
 		</div>
 	</section>

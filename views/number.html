@@ -1,56 +1,74 @@
-<div  ng-controller="NumberController as number">
-	<section class="content" ng-show="number.config.show">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Sorteio de Números</h3>
-			</div>
-			<div class="panel-body">
-				<div class="row">
-					<form name="myForm" novalidate>
-						<div class="col-md-6 col-md-offset-3">
-							<div class="col-md-6">
-								<label class="label-number">De: </label>						
-								<input type="number" class="input-number" placeholder="Início" min="0" ng-model="number.config.begin" name="min_range" />		
-							</div>
-							<div class="col-md-6">
-								<label class="label-number">Até: </label>
-								<input type="number" class="input-number" min="{{number.config.begin + 1}}" placeholder="Fim" ng-model="number.config.end" id="max_range" /> 
-							</div>
-							<div class="col-md-12">
-								<input type="checkbox" id="repeatNumber" ng-model="number.config.repeat" />
-								<label class="label-number" for="repeatNumber">Com repetição.</label>
-							</div>
-							<div class="col-md-12">
-								<input type="checkbox" id="autosort" ng-model="number.config.auto" />
-								<label for="autosort">Sortear números automaticamente</label>			
-							</div>
-							<div class="col-md-12" ng-show="number.config.auto">
-								<label class="label-number">Quantidade de números à sortear: </label>
-								<input type="number" class="input-number" max="{{number.config.end - number.config.begin}}" min="1" step="1" ng-model="number.config.autoLimit" name="autoLimit" />
-							</div>
-							<div class="col-md-12" ng-show="number.config.auto">
-								<label class="label-number">Intervalo entre os sorteios: </label>
-								<input type="number" min="1" max="5" step="1" class="input-number" ng-model="number.config.ticksPerSecond" id="ticksPerSecond" />
-								<label ng-if="number.config.ticksPerSecond <= 1" for="repeatNumber">segundo.</label>
-								<label ng-if="number.config.ticksPerSecond > 1" for="repeatNumber">segundos.</label>	
-							</div>
-							<div class="">
-								<input type="button" id="btnRaffle" ng-click="number.start()" class="btn btn-primary btn-lg"  value="Começar" />
+<div class="content" ng-controller="NumberController as number">
+	<div class="page-header">
+		<h1>Sorteio de Números</h1>
+	</div>	
+
+	<section ng-show="number.config.show">		
+		<div class="panel-body">
+			<div class="row">
+				<form name="myForm" novalidate>
+					<div class="col-md-6 col-md-offset-3">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="min_range">De: </label>						
+								<input type="number" class="form-control" placeholder="Início" min="0" ng-model="number.config.begin" name="min_range" />		
 							</div>
 						</div>
-					</div>					
-				</form>
-			</div>		
-		</div>
-	</section>
 
-	<section ng-hide="number.config.show" class="content">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="max_range">Até: </label>
+								<input type="number" class="form-control" min="{{number.config.begin + 1}}" placeholder="Fim" ng-model="number.config.end" name="max_range" />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-md-12">
+								<div class="checkbox">
+									<label for="repeatNumber">
+										<input type="checkbox" name="repeatNumber" ng-model="number.config.repeat" />Com repetição.
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<div class="checkbox">
+									<label for="autorafle">
+										<input type="checkbox" id="autorafle" ng-model="number.config.auto" />Sortear números automaticamente.
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-6" ng-show="number.config.auto">						
+								<label for="autoLimit">Quantidade de números: </label>
+								<input type="number" class="form-control" max="{{number.config.end - number.config.begin}}" min="1" step="1" ng-model="number.config.autoLimit" name="autoLimit" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12" ng-show="number.config.auto">
+								<label for="ticksPerSecond">Intervalo entre os sorteios (em segundos): </label>
+								<input type="number" min="1" max="5" class="form-control" step="1" ng-model="number.config.ticksPerSecond" name="ticksPerSecond" />
+							</div>
+						</div>						
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="button" id="btnRaffle" ng-click="number.start()" class="form-control btn btn-primary"  value="Começar" />
+							</div>
+						</div>					
+					</div>					
+				</div>					
+			</form>
+		</div>				
+	</section>
+	<section ng-hide="number.config.show">
 		<label class="last-number">{{number.last}}</label>
 		<div>			
 			<input type="button" id="btnRaffle" ng-click="number.next()" ng-disabled="!number.enableButton" class="btn btn-primary btn-lg"  value="Sortear" />
 		</div>
 		<div class="panel panel-default result-number">
-			<h3>Resultado:</h3>
+			<h3 class="panel-header">Resultado:</h3>
 			<div class="panel-body">
 				<div class="row">			
 					<div>
@@ -62,7 +80,7 @@
 			</div>
 		</div>
 		<div>			
-			<input type="button" ng-click="number.save()" ng-disabled="number.results.length == 0" class="btn btn-lg"  value="Salvar" />
+			<input type="button" ng-click="number.save()" ng-disabled="number.results.length == 0" class="btn btn-lg" title="Se o sorteio acabou, você pode salvar o resultado clicando neste botão para consultas futuras." value="Clique para salvar o resultado" />
 		</div>
 	</section>
 </div>

@@ -7,12 +7,12 @@ body {
 	padding-top: 50px;
 }
 .content {
-	padding: 40px 15px;
+	/*padding: 40px 15px;*/
 	text-align: center;
 }
 
 .result-number{
-	margin-top: 5px;
+	/*margin-top: 5px;*/
 }
 .result-number ul li{
 	display: inline;	
@@ -56,11 +56,14 @@ input[type=checkbox]
 	-moz-transform: scale(2); /* FF */
 	-webkit-transform: scale(2); /* Safari and Chrome */
 	-o-transform: scale(2); /* Opera */
-	padding: 10px;
-	margin: 10px !important;
+	/*padding: 10px;
+	margin: 10px !important;*/
+}
+.checkbox{
+	margin-left: 6px;
 }
 
-.raffle-card {
+.raffle-card-btn {
 	display: inline-block;
 	border: 1px solid;
 	width: 16%;
@@ -70,11 +73,11 @@ input[type=checkbox]
 	color: #FFF;	
 	cursor: pointer;
 }
-.raffle-card:hover, .raffle-card {
+.raffle-card-btn:hover, .raffle-card {
 	color: #FFF;
 	text-decoration: none;	
 }
-.raffle-card:hover{
+.raffle-card-btn:hover{
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#a9e4f7+0,0fb4e7+100;Ble+3D+%235 */
 	background: rgb(169,228,247); /* Old browsers */
 	background: -moz-linear-gradient(top,  rgba(169,228,247,1) 0%, rgba(15,180,231,1) 100%); /* FF3.6+ */
@@ -85,7 +88,7 @@ input[type=checkbox]
 	background: linear-gradient(to bottom,  rgba(169,228,247,1) 0%,rgba(15,180,231,1) 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a9e4f7', endColorstr='#0fb4e7',GradientType=0 ); /* IE6-9 */
 }
-.raffle-card:active{
+.raffle-card-btn:active{
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f7fbfc+0,d9edf2+40,add9e4+100;Blue+3D+%231 */
 	background: rgb(247,251,252); /* Old browsers */
 	background: -moz-linear-gradient(top,  rgba(247,251,252,1) 0%, rgba(217,237,242,1) 40%, rgba(173,217,228,1) 100%); /* FF3.6+ */
@@ -96,9 +99,35 @@ input[type=checkbox]
 	background: linear-gradient(to bottom,  rgba(247,251,252,1) 0%,rgba(217,237,242,1) 40%,rgba(173,217,228,1) 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7fbfc', endColorstr='#add9e4',GradientType=0 ); /* IE6-9 */
 }
-.raffle-card.suggestion{
+.raffle-card-btn.suggestion{
 	background-color: rgba(44,83,158,1);
 }
 .error{
 	color: #f00;
+}
+.form-group input[type=button]{
+	margin-top: 5px;
+}
+
+
+@media screen and (max-width: 480px) {
+
+	.raffle-card-btn {
+		width: 100%;
+	}
+	.h1, h1{
+		font-size: 27px !important;
+	}
+ /*
+    #header {
+        height: auto;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    #sidebar {
+        display: none;
+    }
+    */
+
 }
