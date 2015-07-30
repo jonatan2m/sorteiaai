@@ -56,8 +56,7 @@ input[type=checkbox]
 	-moz-transform: scale(2); /* FF */
 	-webkit-transform: scale(2); /* Safari and Chrome */
 	-o-transform: scale(2); /* Opera */
-	/*padding: 10px;
-	margin: 10px !important;*/
+	margin-right: 5px !important;	
 }
 .checkbox{
 	margin-left: 6px;
@@ -117,17 +116,5 @@ input[type=checkbox]
 	}
 	.h1, h1{
 		font-size: 27px !important;
-	}
- /*
-    #header {
-        height: auto;
-    }
-    h1 {
-        font-size: 24px;
-    }
-    #sidebar {
-        display: none;
-    }
-    */
-
+	} 
 }

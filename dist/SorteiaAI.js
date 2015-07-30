@@ -3152,9 +3152,9 @@ app.controller('HomeController', ['$http', function($http){
             
             result.created = data.created;
             result.alias = data.alias;
-            var raffleData = JSON.parse(data.data);
-            result.remaingValues = JSON.parse(data.remaingValues).join('\n');
-
+            var raffleData = JSON.parse(data.data);            
+            //result.remaingValues = JSON.parse(data.remaingValues).join('\n');
+            result.remaingValues = JSON.parse(data.remaingValues).sort();
             result.config = raffleData.config;
 
             result.configInfo = "{{repeat}} repetição.";
@@ -3165,15 +3165,16 @@ app.controller('HomeController', ['$http', function($http){
             }
 
             result.configInfo = result.configInfo.replace("{" + 
-            result.config.repeat + "}",
-                    result.config.repeat? "Com" : "Sem");
+                result.config.repeat + "}",
+                result.config.repeat? "Com" : "Sem");
             
             for (var i = 0; raffleData.result.length > i; i++) {
                 result.values.push(raffleData.result[i]);
             }            
+
             $scope.$apply();
         });
-    }]);;app.controller('NumberResultController', ['$routeParams',
+}]);;app.controller('NumberResultController', ['$routeParams',
     'numberDataService', '$scope', 
     function($routeParams, numberDataService, $scope){
         var result = this;

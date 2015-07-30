@@ -1,64 +1,84 @@
-<div  ng-controller="ListController as list">
-	<section class="content" ng-show="list.config.show">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">Sorteio com Lista</h3>
-			</div>
-			<div class="panel-body">
-				<div class="row">
+<div class="content" ng-controller="ListController as list">
+	<div class="page-header">
+		<h1>Sorteio de Lista de Nomes</h1>
+	</div>
+
+	<section ng-show="list.config.show">		
+		<div class="panel-body">
+			<div class="row">
+				<form name="myForm" novalidate>
 					<div class="col-md-6 col-md-offset-3">
-						<div class="col-md-12">		
-							<label class="label-number">Insira a lista para sorteio. </br> Um item por linha </label>
-						</div>
-						<div class="col-md-12">	
-							<textarea wrap="hard" cols="5" class="input-textarea" rows="10"  ng-model="list.inputValues"></textarea>
-						</div>
-						<span class="error">{{list.fillText}}</span>
 						<div class="col-md-12">
-							<input type="checkbox" id="repeatNumber" ng-model="list.config.repeat" />
-							<label class="label-number" for="repeatNumber">Com repetição.</label>
-						</div>
+							<div class="form-group">							
+								<label>Preencha o campo abaixo com os nomes, emails ou qualquer outro parâmentro que você deseje usar como base para o sorteio: </label>	
+								<p><small>Apenas 1 item por linha.</small></p>
+							</div>							
+						</div>						
 						<div class="col-md-12">
-							<input type="checkbox" id="autosort" ng-model="list.config.auto" />
-							<label for="autosort">Sortear números automaticamente</label>			
+							<div class="form-group">							
+								<textarea wrap="hard" class="input-textarea" rows="10"  ng-model="list.inputValues"></textarea>
+							</div>							
+							<span class="error">{{list.fillText}}</span>
+						</div>		
+
+						<div class="form-group">
+							<div class="col-md-12">
+								<div class="checkbox">
+									<label for="repeatNumber">
+										<input type="checkbox" name="repeatNumber" ng-model="list.config.repeat" />Com repetição.
+									</label>
+								</div>
+							</div>
 						</div>
-						<div class="col-md-12" ng-show="list.config.auto">
-							<label class="label-number">Quantidade de números à sortear: </label>
-							<input type="number" class="input-number" min="1" step="1" ng-model="list.config.autoLimit" id="autoLimit" />
+						<div class="form-group">
+							<div class="col-md-12">
+								<div class="checkbox">
+									<label for="autorafle">
+										<input type="checkbox" id="autorafle" ng-model="list.config.auto" />Sortear números automaticamente.
+									</label>
+								</div>
+							</div>
 						</div>
-						<div class="col-md-12" ng-show="list.config.auto">
-							<label class="label-number">Intervalo entre os sorteios: </label>
-							<input type="number" min="1" max="5" step="1" class="input-number" ng-model="list.config.ticksPerSecond" id="ticksPerSecond" />
-							<label ng-if="list.config.ticksPerSecond <= 1" for="repeatNumber">segundo.</label>
-							<label ng-if="list.config.ticksPerSecond > 1" for="repeatNumber">segundos.</label>	
+						<div class="form-group">
+							<div class="col-md-6" ng-show="list.config.auto">						
+								<label for="autoLimit">Quantidade de números: </label>
+								<input type="number" class="form-control" max="{{list.config.end - list.config.begin}}" min="1" step="1" ng-model="list.config.autoLimit" name="autoLimit" />
+							</div>
 						</div>
-						<div class="">
-							<input type="button" id="btnRaffle" ng-click="list.start()" class="btn btn-primary btn-lg"  value="Começar" />
+						<div class="form-group">
+							<div class="col-md-12" ng-show="list.config.auto">
+								<label for="ticksPerSecond">Intervalo entre os sorteios (em segundos): </label>
+								<input type="number" min="1" max="5" class="form-control" step="1" ng-model="list.config.ticksPerSecond" name="ticksPerSecond" />
+							</div>
+						</div>						
+						<div class="form-group">
+							<div class="col-md-12">
+								<input type="button" id="btnRaffle" ng-click="list.start()" class="form-control btn btn-primary"  value="Começar" />
+							</div>
+						</div>							
+					</div>
+				</form>				
+			</div>		
+		</section>
+		<section ng-hide="list.config.show" class="content">
+			<label class="last-number">{{list.last}}</label>
+			<div>			
+				<input type="button" id="btnRaffle" ng-click="list.next()" ng-disabled="!list.enableButton" class="btn btn-primary btn-lg"  value="Sortear" />
+			</div>
+			<div class="panel panel-default result-number">
+				<h3 class="panel-header">Resultado:</h3>
+				<div class="panel-body">
+					<div class="row">			
+						<div>
+							<ul>
+								<li ng-repeat="r in list.results track by $index">{{r}}</li>
+							</ul>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</section>
-	<section ng-hide="list.config.show" class="content">
-		<label class="last-number">{{list.last}}</label>
-		<div>			
-			<input type="button" id="btnRaffle" ng-click="list.next()" ng-disabled="!list.enableButton" class="btn btn-primary btn-lg"  value="Sortear" />
-		</div>
-		<div class="panel panel-default result-number">
-			<h3>Resultado:</h3>
-			<div class="panel-body">
-				<div class="row">			
-					<div>
-						<ul>
-							<li ng-repeat="r in list.results track by $index">{{r}}</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>		
-		<div>			
-			<input type="button" ng-click="list.save()" ng-disabled="list.results.length == 0" class="btn btn-lg"  value="Salvar" />
-		</div>
-	</section>
-</div>
+			</div>		
+			<div>			
+				<input type="button" ng-click="list.save()" ng-disabled="list.results.length == 0" class="btn btn-lg" title="Se o sorteio acabou, você pode salvar o resultado clicando neste botão para consultas futuras." value="Clique para salvar o resultado" />
+			</div>	
+		</section>
+	</div>
