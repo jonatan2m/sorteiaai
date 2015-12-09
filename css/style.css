@@ -108,34 +108,38 @@ input[type=checkbox]
 }
 
 
-@media screen and (max-width: 480px) {
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+	.raffle-card-btn a{
+		font-size: 14px;
+	}
+}
 
-	.raffle-card-btn {
-		width: 100%;
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+	.raffle-card-btn a{
+		font-size: 20px;
+	}	
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) { 
+	.raffle-card-btn a{
+		font-size: 30px;
+	}
+}
+
+@media screen and (min-width: 380px) {
+
+	.raffle-card-btn a{		
+		font-size: 25px;
 	}
 	.h1, h1{
 		font-size: 27px !important;
 	} 
 }
 
-/* Small devices (tablets, 768px and up) */
-@media (max-width: 768px) { 
-	.raffle-card-btn {
-		font-size: 30px;
-	}
-}
 
-/* Medium devices (desktops, 992px and up) */
-@media (min-width: 992px) {
-	.raffle-card-btn {
-		font-size: 20px;
-	}
 
-}
 
-/* Large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {
-	.raffle-card-btn {
-		font-size: 14px;
-	}
-}
+
