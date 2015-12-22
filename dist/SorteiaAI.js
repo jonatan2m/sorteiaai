@@ -4975,7 +4975,9 @@ app.run(['authService', function (authService) {
 
 	function authentication (provider){
 
-		var redirectUri = location.protocol + '//' + location.host + '/sorteiaai/authcomplete.html';
+        var redirectUri = document.location.host.indexOf('localhost') === 0 ?
+        "http://localhost/sorteiaai/authcomplete.html" :
+        "http://sorteiaai.com.br/authcomplete.html";
 
         var externalProviderUrl = ngAuthSettings.apiServiceBaseUri + "api/Account/ExternalLoginRegister?provider=" + provider + "&response_type=token&client_id=self" + "&redirect_uri=" + redirectUri;
         window.Callback = callback;
