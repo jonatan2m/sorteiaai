@@ -6,8 +6,7 @@ var serviceBase;
 if (local.test(window.location.hostname))
     serviceBase = 'http://localhost/sorteiaaiapi/';
 else
-//var serviceBase = 'http://localhost/PesquisaCerta';
-    serviceBase = 'http://pesquisacerta.five2solutions.com/';
+    serviceBase = 'http://sorteiaai.com.br/';
 
 
 app.config(function ($httpProvider) {
