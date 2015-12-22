@@ -12,7 +12,7 @@ app.controller('NumberResultController', ['$routeParams',
         result.configInfo = "";
 
         numberDataService.get($routeParams.id)
-        .done(function (data){
+        .then(function (data){
             result.id = data.id;
             
             result.created = data.created;

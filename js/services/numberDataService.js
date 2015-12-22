@@ -1,20 +1,20 @@
-app.service('numberDataService', function (){
+app.service('numberDataService',['$http', function ($http){
 
 	var url = document.location.host.indexOf('localhost') === 0 ?
-		"http://localhost/webapiServer/api/Number/" :
+		"http://localhost/sorteiaaiapi/api/Number/" :
 		"http://sorteiaai.com.br/api/Number/";
 
 	
 	function get(id){		
-		return $.get(url + id);
+		return $http.get(url + id);
 	}
 
 	function insert(objSave){
-		return $.post(url, objSave);
+		return $http.post(url, objSave);
 	}
 
 	return {
 		get: get,
 		insert: insert
 	};
-});
+}]);

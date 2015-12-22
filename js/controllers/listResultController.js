@@ -13,7 +13,7 @@ app.controller('ListResultController', ['$routeParams',
         result.remaingValues = [];
 
         listDataService.get($routeParams.id)
-        .done(function (data){
+        .then(function (data){
             result.id = data.id;
             
             result.created = data.created;

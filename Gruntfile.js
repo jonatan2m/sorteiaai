@@ -9,8 +9,13 @@ module.exports = function(grunt) {
       dist: {
         src: ['node_modules/angular/angular.min.js',
               'node_modules/angular-route/angular-route.min.js',
-              'node_modules/angular-mocks/angular-mocks.js',
+              'node_modules/angular-mocks/angular-mocks.js',              
+              'js/vendor/*.js',
+              'js/plugins/*.js',
+              'js/main.js',              
               'js/app.js',              
+              'js/angular-local-storage.min.js',
+              'js/authService.js',
               'js/services/*.js',
               'js/controllers/*.js'
               ],
@@ -22,9 +27,14 @@ module.exports = function(grunt) {
         // Task-specific options go here.
       },
       all: {
-        src: [
-        "node_modules/bootstrap/dist/css/bootstrap.min.css",                                        
-        "css/style.css",
+        src: [        
+        "css/bootstrap.min.css",
+        "css/font-awesome.min.css",
+        "css/owl.carousel.css",
+        "css/animate.css",
+        "css/main.css",
+        "css/social-buttons.css",
+        "css/responsive.css"
         ],
         dest: "dist/styles.css"
       },
@@ -65,8 +75,10 @@ module.exports = function(grunt) {
       // Your project's source files
       src : ['node_modules/angular/angular.min.js',
       'node_modules/angular-route/angular-route.min.js',
-      'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/angular-mocks/angular-mocks.js',          
       'js/app.js',
+      'js/angular-local-storage.min.js',     
+      'js/authService.js',   
       'js/services/*.js',
       'js/controllers/*.js'
       ],
@@ -83,7 +95,7 @@ module.exports = function(grunt) {
       'js/services/*.js',
       'js/controllers/*.js',
       'specs/*.js'        
-      ],
+      ],      
       options: {
         // options here to override JSHint defaults
         globals: {

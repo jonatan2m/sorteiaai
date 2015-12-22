@@ -18,7 +18,7 @@ app.service('sorteiaaiService', function(coreService, $timeout, $q) {
 
         data.enableButton = !data.enableButton;
 
-        coreService.setup(data.config.begin, data.config.end);
+        coreService.setup(data.instance.config.begin, data.instance.config.end);
 
         data.config.show = false;
 
@@ -64,21 +64,21 @@ app.service('sorteiaaiService', function(coreService, $timeout, $q) {
             },  incrementSpeed());
         }else{
             var index = coreService.random(min, max);       
-            setup.last = setup.config.repeat ?
+            setup.last = setup.instance.config.canRepeatNumber ?
             coreService.getByIndex(index) : coreService
             .getAndRemoveByIndex(index);               
 
             setup.results.push(setup.last);
             setup.enableButton = true;
 
-            var limit = setup.config.autoLimit;
+            var limit = setup.instance.automaticRun.automaticQuantity;
             limit--;
             s.enableButton = true;
-            if(setup.config.auto &&  limit > 0){
-                setup.config.autoLimit = limit;
+            if(setup.instance.automaticRun.enable &&  limit > 0){
+                setup.instance.automaticRun.automaticQuantity = limit;
                 $timeout(function(){
                     _next();
-                }, setup.config.ticksPerSecond * 1000);
+                }, setup.instance.automaticRun.automaticInterval * 1000);
 
             }
         }
@@ -94,8 +94,11 @@ app.service('sorteiaaiService', function(coreService, $timeout, $q) {
 
 app.config(function ($routeProvider) {
 
-    $routeProvider.when("/home", {
-        controller: "HomeController",
+    $routeProvider.when("/", {        
+        templateUrl: "views/index.html"
+    });
+
+    $routeProvider.when("/home", {        
         templateUrl: "views/home.html"
     });
 
@@ -103,53 +106,50 @@ app.config(function ($routeProvider) {
         templateUrl: "views/about.html"
     });
 
-    $routeProvider.when("/number", {
-        controller: "NumberController",
+    $routeProvider.when("/number", {        
         templateUrl: "views/number.html"
     });
 
-    $routeProvider.when("/number/:id",{
-        controller: "NumberResultController",
+    $routeProvider.when("/number/:id",{        
         templateUrl: "views/numberResult.html"
     });
 
-    $routeProvider.when("/list", {
-        controller: "ListController",
+    $routeProvider.when("/list", {        
         templateUrl: "views/list.html"
     });
 
-    $routeProvider.when("/list/:id", {
-        controller: "ListResultController",
+    $routeProvider.when("/list/:id", {        
         templateUrl: "views/ListResult.html"
     });
 
-$routeProvider.otherwise({ redirectTo: "/home" });
+$routeProvider.otherwise({ redirectTo: "/" });
 
 });
 
 app.controller('ListController', ['sorteiaaiService',
-    'listService', 'listDataService', function(service, listService, listDataService){
+    'listService', 'listDataService', '$http', 'ngAuthSettings', function(service, listService, listDataService, $http, ngAuthSettings){
         var list = this;
 
-        list.config = {        
-            repeat : false,
-            show : true,
-            auto : false,
-            autoLimit : 1,
-            ticksPerSecond : 1
+        list.instance = undefined;
+
+        list.config = {                    
+            show : true            
         };
 
         list.enableButton = false;    
         list.last = '--';
         list.results = [];
-        list.input = [];
-        list.alias = '-';
+        list.input = [];        
         list.fillText = '';
 
         list.inputValues = "";
 
         list.next = function (){
             service.next();
+        };
+
+        list.automaticQuantityValidator = function () {
+            return listService.convertInputTextToArray(list.inputValues).length || 1;
         };
 
         list.start = function (){
@@ -161,44 +161,40 @@ app.controller('ListController', ['sorteiaaiService',
 
 
             list.input = listService.convertInputTextToArray(list.inputValues);
+
+            
+
             list.config.show = false;
             service.list(list);
         };
 
         list.save = function (){
-            var data = {
-                config: list.config,
-                result: list.results
-            };
-
-            listDataService.insert({
-                alias: list.alias,
-                data: JSON.stringify(data),
-                remaingValues: JSON.stringify(list.input)
-            }).done(function(id){                
+            list.instance.winners = JSON.stringify(list.results);
+            list.instance.attendees = JSON.stringify(list.input);
+            
+            listDataService.insert(list.instance).then(function(id){                
                 document.location = document.location.href + '/' + id;
             });
         };
+
+        $http.get(ngAuthSettings.apiServiceBaseUri+"api/List/Metadata").then(function(a) {
+            list.instance = a.data;
+        });
     }]);
 
 app.controller('NumberController', ['sorteiaaiService',
-    'numberDataService', function(service, numberDataService){
+    'numberDataService', '$http', 'ngAuthSettings' , function(service, numberDataService, $http, ngAuthSettings){
         var number = this;
 
-        number.config = {
-            begin : 1,
-            end : 10,
-            repeat : false,
-            show : true,
-            auto : false,
-            autoLimit : 2,
-            ticksPerSecond : 1
+        number.instance = undefined;
+        
+        number.config = {            
+            show : true            
         };    
 
         number.enableButton = false;    
         number.last = '--';
-        number.results = [];
-        number.alias = "-";
+        number.results = [];        
 
         number.next = function () {     
             service.next();     
@@ -209,23 +205,36 @@ app.controller('NumberController', ['sorteiaaiService',
             service.number(number);
         };
 
-        number.save = function (){          
-            var data = {
-                config: number.config,
-                result: number.results
-            };
+        number.save = function () {          
 
-            numberDataService.insert({
-                alias: number.alias,
-                data: JSON.stringify(data)
-            })
-            .done(function(id){                
-                document.location = document.location.href + '/' + id;
+            number.instance.result = JSON.stringify(number.results);
+
+            numberDataService.insert(number.instance)
+            .then(function(id){                
+                document.location = document.location.href + '/' + id.data;
             });
         };
+
+        $http.get(ngAuthSettings.apiServiceBaseUri+"api/Number/Metadata").then(function(a) {
+            number.instance = a.data;            
+        });
     }]);
 
-app.controller('HomeController', ['$http', function($http){
+app.controller('IndexController', ['$http', 'loginService', function($http, loginService){
+    var index = this;
+
+    index.connect = function (provider){
+        loginService.authentication(provider);
+    };
+
+}]);
+
+app.controller('HomeController', ['$http', 'loginService', 'ngAuthSettings', function($http, loginService, ngAuthSettings){
     var home = this;
 
+    home.connect = function (provider){
+        loginService.authentication(provider);
+    };
+
+   
 }]);
