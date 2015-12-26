@@ -35,13 +35,7 @@ app.service('loginService', ['$http', '$location', 'ngAuthSettings', 'authServic
             var externalData = { provider: fragment.provider, externalAccessToken: fragment.external_access_token };
             authService.obtainAccessToken(externalData)
             	.then(function (response) {
-            		$location.path('home');
-            		/*
-            		$http.get(ngAuthSettings.apiServiceBaseUri+"api/Account/UserInfo")
-						.then(function(a) {
-			 				console.log(a);
-					});
-					*/
+            		$location.path('home');            		
             	},
             	function (err) {
             		//$scope.message = err.error_description;

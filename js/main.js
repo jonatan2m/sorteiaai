@@ -10,11 +10,11 @@ $(document).ready(function(){
     )
     wow.init();
 
-     $('#top-nav').onePageNav({
+     /*$('#top-nav').onePageNav({
         currentClass: 'current',
         changeHash: true,
         scrollSpeed: 1200
-    });
+    });*/
 
      
     //animated header class
@@ -38,13 +38,13 @@ $(document).ready(function(){
         omitWeeks: true
     });*/
 
-    $('.init-slider').owlCarousel({
+    /*$('.init-slider').owlCarousel({
         items:1,
         merge:true,
         loop:true,
         video:true,
         smartSpeed: 600
-    });
+    });*/
 
     /*$('input, textarea').data('holder', $('input, textarea').attr('placeholder'));
 
@@ -57,7 +57,7 @@ $(document).ready(function(){
 
 
     //contact form validation
-    $("#contact-form").validate({
+    /*$("#contact-form").validate({
         rules: {
             name: {
                 required: true,
@@ -103,7 +103,7 @@ $(document).ready(function(){
                 }
             });
         }
-    });
+    });*/
 
 });
 

@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         src: [        
         "css/bootstrap.min.css",
         "css/font-awesome.min.css",
-        "css/owl.carousel.css",
+        //"css/owl.carousel.css",
         "css/animate.css",
         "css/main.css",
         "css/social-buttons.css",
