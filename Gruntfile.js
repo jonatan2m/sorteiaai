@@ -8,8 +8,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['node_modules/angular/angular.min.js',
-              'node_modules/angular-route/angular-route.min.js',
-              'node_modules/angular-mocks/angular-mocks.js',              
+              'node_modules/angular-route/angular-route.min.js',              
               'js/vendor/*.js',
               'js/plugins/*.js',
               'js/main.js',              

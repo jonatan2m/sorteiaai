@@ -8,12 +8,11 @@ app.service('loginService', ['$http', '$location', 'ngAuthSettings', 'authServic
 
         var externalProviderUrl = ngAuthSettings.apiServiceBaseUri + "api/Account/ExternalLoginRegister?provider=" + provider + "&response_type=token&client_id=self" + "&redirect_uri=" + redirectUri;
         window.Callback = callback;
+        window.ForceRefresh = forceRefresh;
         var oauthWindow = window.open(externalProviderUrl, "Authenticate Account", "location=0,status=0,width=600,height=750");
 	}
 
-	function callback(fragment){		
-		
-		//window.sessionStorage.setItem('perfil', JSON.stringify(fragment));
+	function callback(fragment) {		
 		
    		ngAuthSettings.clientId = fragment.client_id;
 
@@ -48,17 +47,16 @@ app.service('loginService', ['$http', '$location', 'ngAuthSettings', 'authServic
             		//$scope.message = err.error_description;
             	});
         }
-		
-		
-
-
-		
 	}
 
-
+    function forceRefresh(fragment) {
+        callback(fragment);
+        //$location.path('home');
+    }
 
 	return {
 		authentication: authentication,
-		callback: callback
+		callback: callback,
+        forceRefresh: forceRefresh
 	};
 }]);

@@ -220,17 +220,25 @@ app.controller('NumberController', ['sorteiaaiService',
         });
     }]);
 
-app.controller('IndexController', ['$http', 'loginService', function($http, loginService){
+app.controller('IndexController', ['$http', 'loginService', 'ngAuthSettings', '$location', function($http, loginService, ngAuthSettings, $location){
     var index = this;
 
     index.connect = function (provider){
         loginService.authentication(provider);
     };
 
+    $http.get(ngAuthSettings.apiServiceBaseUri+"api/Account/UserInfo")
+    .then(function(a)
+    {     
+        $location.path('home');
+    });
+
 }]);
 
-app.controller('HomeController', ['$http', 'loginService', 'ngAuthSettings', function($http, loginService, ngAuthSettings){
+app.controller('HomeController', ['$http', 'loginService', 'ngAuthSettings', '$location', function($http, loginService, ngAuthSettings, $location){
     var home = this;
+
+    $http.get(ngAuthSettings.apiServiceBaseUri+"api/Account/UserInfo");    
 
     home.connect = function (provider){
         loginService.authentication(provider);

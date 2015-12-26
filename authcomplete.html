@@ -59,11 +59,16 @@
         window.opener.Callback(fragment);
         window.close();
 
+        window.forceClose = function (){
+            window.opener.ForceRefresh(fragment);
+            window.close();
+        }
+
 
     </script>
     <div>
         <p> Autenticação realizada com sucesso!</p>
-        <p>Caso a janela não feche automaticamente, <a href="" onclick="window.close();">clique aqui</a></p>
+        <p>Caso a janela não feche automaticamente, <a href="" onclick="window.forceClose();">clique aqui</a></p>
     </div>
 </body>
 </html>
