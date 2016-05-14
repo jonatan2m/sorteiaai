@@ -9,6 +9,8 @@
   "author": "Jonatan Machado",
   "license": "ISC",
   "devDependencies": {
+    "angular-mocks": "1.5.0",
+    "angular-route": "^1.5.5",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-concat-css": "^0.3.1",

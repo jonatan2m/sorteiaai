@@ -33,7 +33,8 @@ module.exports = function(grunt) {
         "css/animate.css",
         "css/main.css",
         "css/social-buttons.css",
-        "css/responsive.css"
+        "css/responsive.css",
+        "css/custom.css"
         ],
         dest: "dist/styles.css"
       },
