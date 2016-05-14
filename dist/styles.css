@@ -4954,3 +4954,13 @@ px      68    160    252    */
 	padding: 47px 0 0 0;
 	margin-bottom: 63px;
 }
+.last-list{
+	text-align: center;
+	font-size: 60px;
+	padding: 47px 0 0 0;
+	margin-bottom: 63px;
+	white-space: nowrap;
+}
+.sorteiaai-input-textarea{
+	width: 100%;
+}
