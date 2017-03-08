@@ -55,22 +55,7 @@ module.exports = function(grunt) {
           'dist/<%= pkg.name %>.min.js': ['<%= concat.dist.dest %>']
         }
       }
-    },
-    /*karma: {  
-      unit: {
-        options: {
-          frameworks: ['jasmine'],
-          singleRun: true,
-          browsers: ['PhantomJS'],
-          files: [
-          'node_modules/angular/angular.min.js',
-          'node_modules/angular-mocks/angular-mocks.js',
-          'js/app.js',
-          'specs/*.js'
-          ]
-        }
-      }
-    },*/    
+    }, 
     jasmine : {
       // Your project's source files
       src : ['node_modules/angular/angular.min.js',
@@ -103,7 +88,8 @@ module.exports = function(grunt) {
           console: true,
           module: true,
           document: true
-        }
+        },
+        reporterOutput: ""
       }
     },
     notify_hooks: {
@@ -123,17 +109,16 @@ grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-jshint');
 
 grunt.loadNpmTasks('grunt-contrib-jasmine');
-  //grunt.loadNpmTasks('grunt-karma');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-concat-css');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
+grunt.loadNpmTasks('grunt-contrib-watch');
+grunt.loadNpmTasks('grunt-contrib-concat');
+grunt.loadNpmTasks('grunt-concat-css');
+grunt.loadNpmTasks('grunt-contrib-cssmin');
   // This plugin provides the "connect" task.
   //grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-notify');
 
   grunt.registerTask('test', ['jshint', 'jasmine']);
 
-  grunt.registerTask('default', ['jshint', 'jasmine', 'concat', 'concat_css', 'cssmin', 'uglify']);
+  grunt.registerTask('default', ['jshint', 'concat', 'concat_css', 'cssmin', 'uglify']);
 
 };
